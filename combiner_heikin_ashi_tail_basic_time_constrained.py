@@ -4,15 +4,15 @@ import numpy as np
 import HeikinAshi as heiken
 import TimeConstraints as tc
 
-def combiner_heikin_ashi_tail_basic_time_constrained_gen_df(df, tol, openRunLen, min_open_sum, open_prev_x_len, min_close_sum, close_prev_x_len, scst):
+def combiner_heikin_ashi_tail_basic_time_constrained_gen_df(df, tol, openRunLen, min_open_sum, open_prev_x_len, min_close_sum, close_prev_x_len, scso, open_start_time, open_end_time, close_time):
 	ha = heiken.gen_Heikin_Ashi_candles(df)
 	df = df.join(ha)
-	haptr = heiken.Heikin_Ashi_pos_tail_run(ha, 0)
+	haptr = heiken.Heikin_Ashi_pos_tail_run(ha, tol/100)
 	df = df.join(haptr)
-	df = df.join(heiken.Heikin_Ashi_tail_long_open_decision(df, 2, 0.05/100, 2))
-	df = df.join(heiken.Heikin_Ashi_tail_long_close_decision(df, 0.05/100, 2, 0.05/100))
-	df = df.join(tc.set_allow_open_range(df, "2015-01-01 09:20:00", "2015-01-01 09:25:00"))
-	df = df.join(tc.set_close_time(df, "2015-01-01 15:00:00"))
+	df = df.join(heiken.Heikin_Ashi_tail_long_open_decision(df, openRunLen, min_open_sum/100, open_prev_x_len))
+	df = df.join(heiken.Heikin_Ashi_tail_long_close_decision(df, min_close_sum/100, close_prev_x_len, scso/100))
+	df = df.join(tc.set_allow_open_range(df, open_start_time, open_end_time))
+	df = df.join(tc.set_close_time(df, close_time))
 	df = df.join(combiner_heikin_ashi_tail_basic_time_constrained_gen_long_decisions(df))
 	return df
 
