@@ -30,22 +30,3 @@ def rsi_gen_df(df, period):
 
 	ret = pd.DataFrame(ret, columns=["AvgGain", "AvgLoss", "RS", "RSI"])
 	return ret
-
-	# curr_gain = max(candles[0][close_idx]-candles[0][open_idx], 0)
-	# curr_loss = min(candles[0][close_idx]-candles[0][open_idx], 0)
-	# ret = [[0,0,0,0]]*(period-1)
-	# for i in range(0, period):
-	# 	net_gain += max(candles[i][close_idx]-candles[i][open_idx], 0)
-	# 	net_loss += abs(min(candles[i][close_idx]-candles[i][open_idx], 0))
-
-	# avg_gain = net_gain/period
-	# avg_loss = net_loss/period
-	# rs = avg_gain/avg_loss
-	# rsi = 100 - (100/(1+rs))
-	# ret.append([avg_gain, avg_loss, rs, rsi])
-
-	# for i in range(period, num_candles):
-	# 	net_gain += max(candles[i][close_idx]-candles[i][open_idx], 0)
-	# 	net_loss += abs(min(candles[i][close_idx]-candles[i][open_idx], 0))
-	# 	net_gain -= max(candles[i-period][close_idx]-candles[i-period][open_idx], 0)
-	# 	net_loss -= abs(min(candles[i-period][close_idx]-candles[i-period][open_idx], 0))

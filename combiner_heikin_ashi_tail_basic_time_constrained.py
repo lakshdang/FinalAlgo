@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import HeikinAshi as heiken
 import TimeConstraints as tc
-
+#df, 0%, 2, 0.2%, 2, 0.2%, 2, 0.2% 
 def combiner_heikin_ashi_tail_basic_time_constrained_gen_df(df, tol, openRunLen, min_open_sum, open_prev_x_len, min_close_sum, close_prev_x_len, scso, open_start_time, open_end_time, close_time):
 	ha = heiken.gen_Heikin_Ashi_candles(df)
 	df = df.join(ha)
@@ -40,4 +40,4 @@ def combiner_heikin_ashi_tail_basic_time_constrained_gen_long_decisions(df):
 			open_decisions.append(0)
 	if(transaction_open):
 		open_decisions[len(open_decisions)-1] = 1
-	return pd.DataFrame(open_decisions, columns=["LongDecisions"])
+	return pd.DataFrame(open_decisions, columns=["TradeDecisions"])
