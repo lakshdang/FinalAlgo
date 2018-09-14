@@ -31,10 +31,10 @@ def combiner_heikin_ashi_tail_basic_time_constrained_gen_long_decisions(df):
 		open_decision = curr_candle[ha_open_dec_idx]+curr_candle[tc_open_dec_idx]>=2
 		close_decision = curr_candle[ha_close_dec_idx]+curr_candle[tc_close_dec_idx]>=1 
 		if not transaction_open and open_decision:
-			open_decisions.append(-1)
+			open_decisions.append(1)
 			transaction_open = True
 		elif transaction_open and close_decision:
-			open_decisions.append(1)
+			open_decisions.append(-1)
 			transaction_open = False
 		else:
 			open_decisions.append(0)

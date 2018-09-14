@@ -34,6 +34,7 @@ file = "/Users/lakshdang/Desktop/AlgoTrading/CodeForAbbas/WorkingData/EQ/5minute
 
 df = pd.read_csv(file)
 df = chatbtc.combiner_heikin_ashi_tail_basic_time_constrained_gen_df(df, 0, 2, 0.2, 2, 0.2, 2, 0.2, "10:30:00", "14:30:00", "15:00:00")
-transactions = analysis.minuteDecisionsToTrasactionList(df, 1)
-# print(transactions)
-analysis.basic_analysis(transactions)
+df.to_csv("/Users/lakshdang/Desktop/temp.csv")
+# transactions = analysis.minuteDecisionsToTrasactionList(df, 1)
+# transactions.to_csv("/Users/lakshdang/Desktop/transactions.csv")
+# analysis.basic_analysis(transactions)

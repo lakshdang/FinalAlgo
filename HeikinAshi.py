@@ -47,12 +47,12 @@ def Heikin_Ashi_pos_tail_run(df, tol):
 	for i in range(0, num_candles):
 		curr_candle = ha_candles[i]
 		curr_body = curr_candle[ha_close_idx]-curr_candle[ha_open_idx]
-		body_sum+=curr_body
+		body_sum += curr_body
 		curr_tol = tol * (curr_body)
 		
 		if curr_tol+curr_candle[ha_low_idx]>=curr_candle[ha_open_idx]:
 			curr_run+=1
-			curr_sum+=(curr_body)
+			curr_sum+=curr_body
 		else:
 			curr_run = 0
 			curr_sum = 0
