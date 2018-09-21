@@ -2,6 +2,13 @@ import datetime as dt
 import pandas as pd
 import numpy as np
 
+#HA = Heikin Ashi
+
+#Generates Heikin Ashi candles
+#@input - df: dataframe, containing candle data
+#
+#@output - 	dataframe, containing corresponding candles HeikinAshi open, close, high, low
+#			columns: HeikinAshiOpen, HeikinAshiClose, HeikinAshiHigh, HeikinAshiLow
 def gen_Heikin_Ashi_candles(df):
 	ha=[]
 	if(df.shape[0]==0):
@@ -31,6 +38,14 @@ def gen_Heikin_Ashi_candles(df):
 		
 	return pd.DataFrame(ha, columns=["HeikinAshiOpen", "HeikinAshiClose", "HeikinAshiHigh", "HeikinAshiLow"])
 
+#Generates HA candles' body size, cumulitive body size for all preceeding candles, 
+#count of current run of HA candles whose HA tail size is within given tolerance
+#@input - df: dataframe, containing HA candle data
+#		- tol: Integer, % of body size which is acceptable limit for tail size 
+#
+#@output - 	dataframe, containing corresponding candles HeikinAshi pos tail run, curr candle HA body,
+#			cumulative body size (inclusive of current candle)
+#			columns: HeikinAshiPosRun, CurrCandleBody, BodyCumSum
 def Heikin_Ashi_pos_tail_run(df, tol):
 	ptrvo = []
 	num_candles = df.shape[0]
@@ -61,7 +76,16 @@ def Heikin_Ashi_pos_tail_run(df, tol):
 
 	return pd.DataFrame(ptrvo, columns=["HeikinAshiPosRun", "CurrCandleBody", "BodyCumSum"])
 
-def Heikin_Ashi_tail_long_open_decision(df, runlen, min_sum, prev_x_len):
+#Generate open decision for current candle(Assuming no transaction open at current candle open) 
+#based on current HA candles pos tail run length and cumulative body sum for prev "x" candles meeting threshold
+#@input - df: dataframe, containing HA candle data (gen_Heikin_Ashi_candles) + HA pos_tail_run data (Heikin_Ashi_pos_tail_run)
+#		- runlen: Integer, threshold value for pos tail run length
+#		- prev_x_len: Integer, number of previous candles we consider cumulative body sum for
+#		- min_sum: Integer, cumulative body sum threshold for cumulative body sum of prev_x_len candles
+#
+#@output	- dataframe, containing long transaction open decision for current candle assuming no transaction open
+# 			  columns: HA_tail_body_open_decision
+def Heikin_Ashi_tail_long_open_decision(df, runlen, prev_x_len, min_sum):
 	num_candles = df.shape[0]
 	open_decision = []
 	candles = df.values
@@ -82,7 +106,17 @@ def Heikin_Ashi_tail_long_open_decision(df, runlen, min_sum, prev_x_len):
 			open_decision.append(0)
 	return pd.DataFrame(open_decision, columns=["HA_tail_body_open_decision"])
 
-def Heikin_Ashi_tail_long_close_decision(df, min_sum, prev_x_len, single_candle_sell_off_threshold):
+#Generate close decision for current candle(Assuming transaction is open at current candle open) 
+#based on current HA candles cumulative body sum for prev "x" candles meeting threshold 
+#or single candle body meeting separate threshold
+#@input - df: dataframe, containing HA candle data (gen_Heikin_Ashi_candles) + HA pos_tail_run data (Heikin_Ashi_pos_tail_run)
+#		- prev_x_len: Integer, number of previous candles we consider cumulative body sum for
+#		- min_sum: Integer, cumulative body sum threshold for cumulative body sum of prev_x_len candles (must be less than negative of this value)
+#		- single_candle_sell_off_threshold: Integer, self-explanatory
+#
+#@output	- dataframe, containing long transaction close decision for current candle assuming long transaction is open
+# 			  columns: HA_tail_body_close_decision
+def Heikin_Ashi_tail_long_close_decision(df, prev_x_len, min_sum, single_candle_sell_off_threshold):
 	num_candles = df.shape[0]
 	close_decision = []
 	candles = df.values

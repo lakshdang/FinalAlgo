@@ -2,7 +2,7 @@ import datetime as dt
 import pandas as pd
 import numpy as np
 import os
-from pathlib import Path
+import pathlib
 
 import fetchCandleData as fetchData
 import renko
@@ -31,10 +31,23 @@ file = "/Users/lakshdang/Desktop/AlgoTrading/CodeForAbbas/WorkingData/EQ/5minute
 
 # diff = end_date-start_date
 # print((diff.days*86400 + diff.seconds)/60)
-
-df = pd.read_csv(file)
-df = chatbtc.combiner_heikin_ashi_tail_basic_time_constrained_gen_df(df, 0, 2, 0.2, 2, 0.2, 2, 0.2, "10:30:00", "14:30:00", "15:00:00")
-df.to_csv("/Users/lakshdang/Desktop/temp.csv")
+# df = pd.read_csv(file)
+# df = chatbtc.combiner_heikin_ashi_tail_basic_time_constrained_gen_df(df, 0, 2, 0.2, 2, 0.2, 2, 0.2, "10:30:00", "14:30:00", "15:00:00")
 # transactions = analysis.minuteDecisionsToTrasactionList(df, 1)
-# transactions.to_csv("/Users/lakshdang/Desktop/transactions.csv")
 # analysis.basic_analysis(transactions)
+
+print("Making Dir")
+pathlib.Path('/Users/lakshdang/Desktop/AlgoTrading/CodeForAbbas/test').mkdir(parents=True, exist_ok=True)
+
+# arr = [["File 1", [1,2,3,4]], ["File 2", [1,2,3,4,5,6]]]
+# df = pd.DataFrame(arr, columns=["File", "List"])
+# df.to_csv("/Users/lakshdang/Desktop/AlgoTrading/CodeForAbbas/test/listdf.csv")
+df = pd.read_csv("/Users/lakshdang/Desktop/AlgoTrading/CodeForAbbas/test/listdf.csv")[1:]
+# print(df.dtypes)
+arr = df.values[0][2]
+arr = arr[1:len(arr)-1]
+arr = arr.split(',')
+print(arr)
+arr = list(map(int, arr))
+print(arr)
+# print(df)

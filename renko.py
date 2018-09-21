@@ -2,6 +2,14 @@ import datetime as dt
 import pandas as pd
 import numpy as np
 
+
+#Generates renko blocks of given block size.
+#@input - df: dataframe, containing canle data
+#		- block_size: integer, % size of first candles opening price to be used as block size in renko
+#
+#@output - 	dataframe, containing corresponding candles Renkoblock opening price,
+#			run of green blocks preceeding and run of red blocks preceeding
+#			columns: RenkoBlockOpenPrice, RenkoGreenRun, RenkoRedRun
 def renko_gen_blocks(df, block_size):
 	numCandles = df.shape[0]
 	renko = []
@@ -40,6 +48,12 @@ def renko_gen_blocks(df, block_size):
 		renko.append([block_open_price, green_run, red_run])	
 	return pd.DataFrame(renko, columns=["RenkoBlockOpenPrice", "RenkoGreenRun", "RenkoRedRun"])
 
+
+#Calculates EMA value of given period, EMA updated at every new renko block formation
+#@input - renko: dataframe, containg candles and renko blocks columns
+#		- EMA_len: integer, EMA period
+#@output	- dataframe, containing 1 column for renko block EMA value corresponsding to each candle
+#			  columns: RenkoEMAperRenko
 def renko_EMA_per_Renko(renko, EMA_len):
 	weight = 2/(EMA_len+1)
 	prev_row = renko.ix[0]

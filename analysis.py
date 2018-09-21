@@ -24,7 +24,7 @@ def basic_analysis(transactions):
 	for i in range (0, num_transactions):
 		curr_open_time = dt.datetime.strptime(values[i][close_time_idx], "%Y-%m-%d %H:%M:%S")
 		curr_close_time = dt.datetime.strptime(values[i][open_time_idx], "%Y-%m-%d %H:%M:%S")
-		curr_profit = values[i][transaction_sign_idx]*(values[i][close_price_idx]-values[i][open_price_idx])
+		curr_profit = 100*values[i][transaction_sign_idx]*((values[i][close_price_idx]-values[i][open_price_idx])/values[i][open_price_idx])
 		diff = curr_close_time - curr_open_time
 
 		trade_avg_time+=(diff.days*86400 + diff.seconds)/60
